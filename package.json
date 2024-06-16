@@ -1,0 +1,19 @@
+{
+  "name": "barkpark",
+  "version": "1.0.0",
+  "description": "A user populated platform for discovering and reviewing dog parks across the country.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DaniMoher/BarkPark.git"
+  },
+  "author": "Dani Moher",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DaniMoher/BarkPark/issues"
+  },
+  "homepage": "https://github.com/DaniMoher/BarkPark#readme"
+}
