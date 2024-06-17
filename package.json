@@ -15,5 +15,11 @@
   "bugs": {
     "url": "https://github.com/DaniMoher/BarkPark/issues"
   },
-  "homepage": "https://github.com/DaniMoher/BarkPark#readme"
+  "homepage": "https://github.com/DaniMoher/BarkPark#readme",
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "method-override": "^3.0.0",
+    "mongoose": "^8.4.1"
+  }
 }

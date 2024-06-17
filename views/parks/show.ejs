@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show</title>
+</head>
+
+<body>
+    <h1>
+        <%=park.title%> Details
+    </h1>
+    <h2>
+        <%=park.location%>
+    </h2>
+    <p>
+    <form action="/parks/<%=park._id%>?_method=DELETE" method="POST">
+        <button>Delete Park</button>
+    </form>
+    </p>
+    <footer>
+        <div>
+            <a href="/parks/<%=park._id%>/edit">Update this Park</a>
+        </div>
+        <a href="/parks">Return to All Parks</a>
+    </footer>
+</body>
+
+</html>
