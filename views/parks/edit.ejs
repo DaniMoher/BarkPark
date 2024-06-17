@@ -1,14 +1,31 @@
 <% layout('layouts/boilerplate')%>
-    <h1>Update Park</h1>
-    <form action="/parks/<%=park._id%>?_method=PUT" method="POST">
-        <div>
-            <label for="title">Park Name</label>
-            <input type="text" id="title" name="park[title]" value="<%=park.title%>">
+    <div class="row">
+        <h1 class="text-center">Update Park</h1>
+        <div class="col-6 offset-3">
+            <form action="/parks/<%=park._id%>?_method=PUT" method="POST">
+                <div class="mb-3">
+                    <label class="form-label" for="title">Park Name</label>
+                    <input class="form-control" type="text" id="title" name="park[title]" value="<%=park.title%>">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="location">Location</label>
+                    <input class="form-control" type="text" id="location" name="park[location]"
+                        value="<%=park.location%>">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="description">Description</label>
+                    <textarea class="form-control" type="text" id="description"
+                        name="park[description]"><%=park.description%>"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="image">Image URL</label>
+                    <input class="form-control" type="text" id="image" name="park[image]" value="<%=park.image%>">
+                </div>
+
+                <div class="mb-3">
+                    <button class="btn btn-info">Update Park</button>
+                </div>
+            </form>
+            <a href="/parks/<%=park._id%>">Back to Park</a>
         </div>
-        <div>
-            <label for="location">Location</label>
-            <input type="text" id="location" name="park[location]" value="<%=park.location%>">
-        </div>
-        <button>Update Park</button>
-    </form>
-    <a href="/parks/<%=park._id%>">Back to Park</a>
+    </div>

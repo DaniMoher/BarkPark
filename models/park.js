@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const ParkSchema = new Schema({
     title: String,
-    isPrivate: Boolean,
+    image: String,
     description: String,
     location: String
 });

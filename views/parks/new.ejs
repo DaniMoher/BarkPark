@@ -1,14 +1,29 @@
 <% layout('layouts/boilerplate')%>
-    <h1>Post a new park</h1>
-    <form action="/parks" method="POST">
-        <div>
-            <label for="title">Park Name</label>
-            <input type="text" id="title" name="park[title]">
+    <div class="row">
+        <h1 class="text-center">New Park</h1>
+        <div class="col-6 offset-3">
+            <form action="/parks" method="POST">
+                <div class="mb-3">
+                    <label class="form-label" for="title">Park Name</label>
+                    <input class="form-control" type="text" id="title" name="park[title]">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="location">Location</label>
+                    <input class="form-control" type="text" id="location" name="park[location]">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="description">Description <span
+                            class="text-secondary">(Optional)</span></label>
+                    <textarea class="form-control" type="text" id="description" name="park[description]"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="image">Image URL</label>
+                    <input class="form-control" type="text" id="image" name="park[image]">
+                </div>
+                <div class="mb-3">
+                    <button class="btn btn-success">Submit New Park</button>
+                </div>
+            </form>
+            <a href="/parks">Cancel</a>
         </div>
-        <div>
-            <label for="location">Location</label>
-            <input type="text" id="location" name="park[location]">
-        </div>
-        <button>Submit New Park</button>
-    </form>
-    <a href="/parks">Cancel</a>
+    </div>

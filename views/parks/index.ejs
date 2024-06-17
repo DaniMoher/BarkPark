@@ -3,12 +3,28 @@
     <h2>Please view a list of all parks below:</h2>
     <h3>Can't find a park? <a href="/parks/new">Create it!</a>
     </h3>
-    <ul>
-        <% for(let park of parks) { %>
-            <li>
-                <a href="/parks/<%=park._id%>">
-                    <%=park.title%>
-                </a>
-            </li>
-            <% }%>
-    </ul>
+    <% for(let park of parks) { %>
+        <div class="card" mb-3>
+            <div class="row">
+                <div class="col-md-4">
+                    <img class="img-fluid" alt="" src="<%=park.image%>">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <%=park.title%>
+                        </h5>
+                        <p class="card-text">
+                            <%=park.location%>
+                        </p>
+                        <p class="card-text">
+                            <small class="text-muted">
+                                <%=park.description%>
+                            </small>
+                        </p>
+                        <a class="btn btn-primary" href="/parks/<%=park._id%>">View <%=park.title%> Details</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <% }%>

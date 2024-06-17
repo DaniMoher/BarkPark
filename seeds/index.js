@@ -1,7 +1,7 @@
 //required software
 const mongoose = require('mongoose');
 const cities = require('./cities')
-const { places, descriptors } = require('./seedHelpers');
+const { places, descriptors, images } = require('./seedHelpers');
 const Park = require('../models/park');
 
 // connect to mongoose
@@ -23,7 +23,9 @@ const seedDB = async () => {
         const random1000 = Math.floor(Math.random() * 1000);
         const park = new Park({
             location: `${cities[random1000].city}, ${cities[random1000].state}`,
-            title: `${sample(descriptors)} ${sample(places)}`
+            title: `${sample(descriptors)} ${sample(places)}`,
+            image: `${sample(images)}`,
+            description: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quisquam, vel quae porro sunt voluptatum quo error accusamus, obcaecati tenetur qui vero at quas id, autem veritatis adipisci similique dolore eius.',
         })
         await park.save();
     }
