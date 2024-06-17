@@ -4,7 +4,9 @@ const path = require('path');
 const mongoose = require('mongoose');
 const Park = require('./models/park');
 const methodOverride = require('method-override');
+const ejsMate = require('ejs-mate');
 
+//mongoose connection
 mongoose.connect('mongodb://127.0.0.1:27017/bark-park')
     .then(() => {
         console.log('Mongo Connected Successfully')
@@ -17,6 +19,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/bark-park')
 const app = express();
 
 //middleware
+app.engine('ejs', ejsMate)
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'))
 

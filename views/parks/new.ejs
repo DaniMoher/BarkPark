@@ -1,13 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>New Park</title>
-</head>
-
-<body>
+<% layout('layouts/boilerplate')%>
     <h1>Post a new park</h1>
     <form action="/parks" method="POST">
         <div>
@@ -21,7 +12,3 @@
         <button>Submit New Park</button>
     </form>
     <a href="/parks">Cancel</a>
-
-</body>
-
-</html>
