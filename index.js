@@ -3,11 +3,12 @@ const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
 const ejsMate = require('ejs-mate');
-const { parkSchema } = require('./schemas.js');
+const { parkSchema, reviewSchema } = require('./schemas.js');
 const catchAsync = require('./utilities/catchAsync');
 const ExpressError = require('./utilities/ExpressError')
 const methodOverride = require('method-override');
 const Park = require('./models/park');
+const Review = require('./models/reviews');
 
 //mongoose connection
 mongoose.connect('mongodb://127.0.0.1:27017/bark-park')
@@ -30,7 +31,7 @@ app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'))
 
-//
+//middleware validation
 const validatePark = (req, res, next) => {
     const { error } = parkSchema.validate(req.body);
     if (error) {
@@ -40,6 +41,17 @@ const validatePark = (req, res, next) => {
         next();
     }
 }
+
+const validateReview = (req, res, next) => {
+    const { error } = reviewSchema.validate(req.body);
+    if (error) {
+        const msg = error.details.map(el => el.message).join(',')
+        throw new ExpressError(msg, 400)
+    } else {
+        next();
+    }
+}
+
 
 //home page
 app.get('/', (req, res) => {
@@ -59,7 +71,7 @@ app.get('/parks/new', (req, res) => {
 
 //show details of one park
 app.get('/parks/:id', catchAsync(async (req, res) => {
-    const park = await Park.findById(req.params.id)
+    const park = await Park.findById(req.params.id).populate('reviews');
     res.render('parks/show', { park })
 }))
 
@@ -83,11 +95,29 @@ app.put('/parks/:id', validatePark, catchAsync(async (req, res) => {
     res.redirect(`/parks/${park._id}`)
 }))
 
-//delete a park
+//delete a park (and it's reviews)
 app.delete('/parks/:id', catchAsync(async (req, res) => {
     const { id } = req.params;
     await Park.findByIdAndDelete(id);
     res.redirect('/parks')
+}))
+
+//delete a rating
+app.delete('/parks/:id/reviews/:reviewId', catchAsync(async (req, res) => {
+    const { id, reviewId } = req.params;
+    await Park.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
+    await Review.findByIdAndDelete(reviewId);
+    res.redirect(`/parks/${id}`);
+}))
+
+//leave a rating
+app.post('/parks/:id/reviews', validateReview, catchAsync(async (req, res) => {
+    const park = await Park.findById(req.params.id);
+    const review = new Review(req.body.review);
+    park.reviews.push(review);
+    await review.save();
+    await park.save();
+    res.redirect(`/parks/${park._id}`)
 }))
 
 //error catch
