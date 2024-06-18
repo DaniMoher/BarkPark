@@ -2,23 +2,36 @@
     <div class="row">
         <h1 class="text-center">New Park</h1>
         <div class="col-6 offset-3">
-            <form action="/parks" method="POST">
+            <form action="/parks" method="POST" novalidate class="validated-form">
                 <div class="mb-3">
                     <label class="form-label" for="title">Park Name</label>
-                    <input class="form-control" type="text" id="title" name="park[title]">
+                    <input class="form-control" type="text" id="title" name="park[title]" required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label" for="location">Location</label>
-                    <input class="form-control" type="text" id="location" name="park[location]">
+                    <input class="form-control" type="text" id="location" name="park[location]" required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label" for="description">Description <span
                             class="text-secondary">(Optional)</span></label>
-                    <textarea class="form-control" type="text" id="description" name="park[description]"></textarea>
+                    <textarea class="form-control" type="text" id="description" name="park[description]"
+                        required></textarea>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label" for="image">Image URL</label>
-                    <input class="form-control" type="text" id="image" name="park[image]">
+                    <input class="form-control" type="text" id="image" name="park[image]" required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
                 </div>
                 <div class="mb-3">
                     <button class="btn btn-success">Submit New Park</button>

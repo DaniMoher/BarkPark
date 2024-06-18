@@ -1,25 +1,39 @@
 <% layout('layouts/boilerplate')%>
-    <div class="row">
+    <div class="row"> required
         <h1 class="text-center">Update Park</h1>
         <div class="col-6 offset-3">
-            <form action="/parks/<%=park._id%>?_method=PUT" method="POST">
+            <form action="/parks/<%=park._id%>?_method=PUT" method="POST" novalidate class="validated-form">
                 <div class="mb-3">
                     <label class="form-label" for="title">Park Name</label>
-                    <input class="form-control" type="text" id="title" name="park[title]" value="<%=park.title%>">
+                    <input class="form-control" type="text" id="title" name="park[title]" value="<%=park.title%>"
+                        required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label" for="location">Location</label>
                     <input class="form-control" type="text" id="location" name="park[location]"
-                        value="<%=park.location%>">
+                        value="<%=park.location%>" required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label" for="description">Description</label>
-                    <textarea class="form-control" type="text" id="description"
-                        name="park[description]"><%=park.description%>"></textarea>
+                    <textarea class="form-control" type="text" id="description" name="park[description]"
+                        required><%=park.description%></textarea>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label" for="image">Image URL</label>
-                    <input class="form-control" type="text" id="image" name="park[image]" value="<%=park.image%>">
+                    <input class="form-control" type="text" id="image" name="park[image]" value="<%=park.image%>"
+                        required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
                 </div>
 
                 <div class="mb-3">
