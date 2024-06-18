@@ -3,12 +3,14 @@ const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
 const ejsMate = require('ejs-mate');
-const { parkSchema, reviewSchema } = require('./schemas.js');
-const catchAsync = require('./utilities/catchAsync');
+const session = require('express-session');
+const flash = require('connect-flash');
 const ExpressError = require('./utilities/ExpressError')
 const methodOverride = require('method-override');
-const Park = require('./models/park');
-const Review = require('./models/reviews');
+
+const parks = require('./routes/parks')
+const reviews = require('./routes/reviews')
+
 
 //mongoose connection
 mongoose.connect('mongodb://127.0.0.1:27017/bark-park')
@@ -30,95 +32,30 @@ app.set('view engine', 'ejs');
 //middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'))
+app.use(express.static(path.join(__dirname, 'public')))
 
-//middleware validation
-const validatePark = (req, res, next) => {
-    const { error } = parkSchema.validate(req.body);
-    if (error) {
-        const msg = error.details.map(el => el.message).join(',')
-        throw new ExpressError(msg, 400)
-    } else {
-        next();
+//session expires after 1 week
+const sessionConfig = {
+    secret: 'seeecret',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        httpOnly: true,
+        expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+        maxAge: 1000 * 60 * 60 * 24 * 7
     }
 }
+app.use(session(sessionConfig))
+app.use(flash());
 
-const validateReview = (req, res, next) => {
-    const { error } = reviewSchema.validate(req.body);
-    if (error) {
-        const msg = error.details.map(el => el.message).join(',')
-        throw new ExpressError(msg, 400)
-    } else {
-        next();
-    }
-}
-
-
-//home page
-app.get('/', (req, res) => {
-    res.render('home')
+app.use((req, res, next) => {
+    res.locals.success = req.flash('success');
+    res.locals.error = req.flash('error');
+    next();
 })
 
-//show all parks
-app.get('/parks', catchAsync(async (req, res) => {
-    const parks = await Park.find({})
-    res.render('parks/index', { parks })
-}))
-
-//form to create new park
-app.get('/parks/new', (req, res) => {
-    res.render('parks/new');
-})
-
-//show details of one park
-app.get('/parks/:id', catchAsync(async (req, res) => {
-    const park = await Park.findById(req.params.id).populate('reviews');
-    res.render('parks/show', { park })
-}))
-
-//submits new location
-app.post('/parks', validatePark, catchAsync(async (req, res, next) => {
-    const park = new Park(req.body.park);
-    await park.save();
-    res.redirect(`/parks/${park._id}`)
-}))
-
-//edit existing park
-app.get('/parks/:id/edit', catchAsync(async (req, res) => {
-    const park = await Park.findById(req.params.id)
-    res.render('parks/edit', { park })
-}))
-
-//submit edit to park
-app.put('/parks/:id', validatePark, catchAsync(async (req, res) => {
-    const { id } = req.params;
-    const park = await Park.findByIdAndUpdate(id, { ...req.body.park });
-    res.redirect(`/parks/${park._id}`)
-}))
-
-//delete a park (and it's reviews)
-app.delete('/parks/:id', catchAsync(async (req, res) => {
-    const { id } = req.params;
-    await Park.findByIdAndDelete(id);
-    res.redirect('/parks')
-}))
-
-//delete a rating
-app.delete('/parks/:id/reviews/:reviewId', catchAsync(async (req, res) => {
-    const { id, reviewId } = req.params;
-    await Park.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
-    await Review.findByIdAndDelete(reviewId);
-    res.redirect(`/parks/${id}`);
-}))
-
-//leave a rating
-app.post('/parks/:id/reviews', validateReview, catchAsync(async (req, res) => {
-    const park = await Park.findById(req.params.id);
-    const review = new Review(req.body.review);
-    park.reviews.push(review);
-    await review.save();
-    await park.save();
-    res.redirect(`/parks/${park._id}`)
-}))
+app.use('/parks', parks)
+app.use('/parks/:id/reviews', reviews)
 
 //error catch
 app.all('*', (req, res, next) => {
