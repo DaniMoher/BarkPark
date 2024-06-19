@@ -7,6 +7,9 @@ const session = require('express-session');
 const flash = require('connect-flash');
 const ExpressError = require('./utilities/ExpressError')
 const methodOverride = require('method-override');
+const passport = require('passport');
+const LocalStrategy = require('passport-local');
+const User = require('./models/user')
 
 const parks = require('./routes/parks')
 const reviews = require('./routes/reviews')
@@ -45,15 +48,25 @@ const sessionConfig = {
         maxAge: 1000 * 60 * 60 * 24 * 7
     }
 }
-app.use(session(sessionConfig))
+app.use(session(sessionConfig));
 app.use(flash());
 
+//passport auth - MUST BE UNDER SESSION
+app.use(passport.initialize());
+app.use(passport.session());
+
+//use local strategy on User model
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+//flash error functions
 app.use((req, res, next) => {
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');
     next();
 })
-
+//routes
 app.use('/parks', parks)
 app.use('/parks/:id/reviews', reviews)
 
